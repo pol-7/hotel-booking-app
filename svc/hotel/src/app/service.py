@@ -30,9 +30,11 @@ async def create_hotel(hotel_dao: i.HotelDao, data: dto.HotelNew) -> dto.HotelWi
     return await hotel_dao.add(hotel)
 
 
-async def update_hotel(hotel_dao: i.HotelDao, data: dto.HotelPatch) -> dto.HotelWithID:
-    hotel = await get_hotel(hotel_dao, data.id)
-    hotel = dto.HotelWithID.model_validate(hotel.__dict__ | data.__dict__)
+async def update_hotel(hotel_dao: i.HotelDao, patch: dto.HotelPatch) -> dto.HotelWithID:
+    hotel = await get_hotel(hotel_dao, patch.id)
+    hotel = dto.HotelWithID.model_validate(
+        hotel.__dict__ | {k: v for k, v in patch.__dict__.items() if v is not None}
+    )
 
     return await hotel_dao.update(hotel)
 

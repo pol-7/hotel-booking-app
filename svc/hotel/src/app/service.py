@@ -49,12 +49,6 @@ async def get_reviews_by_hotel(
     return await hotel_dao.by_hotel(hotel_id)
 
 
-async def is_hotel_owner(hotel_dao: i.HotelDao, user_id: UUID, hotel_id: UUID) -> bool:
-    hotel = await get_hotel(hotel_dao, hotel_id)
-
-    return hotel.owner_id == user_id
-
-
 async def create_hotel_review(
     hotel_dao: i.HotelDao,
     review_dao: i.HotelReviewDao,
@@ -95,10 +89,3 @@ async def get_hotel_review(
 
 async def delete_hotel_review(review_dao: i.HotelReviewDao, review_id: UUID) -> None:
     await review_dao.delete(review_id)
-
-
-async def is_hotel_review_owner(
-    review_dao: i.HotelReviewDao, user_id: UUID, review_id: UUID
-):
-    review = await get_hotel_review(review_dao, review_id)
-    return review.author_id == user_id
